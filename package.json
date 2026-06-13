@@ -8,7 +8,7 @@
     "test:unit": "vitest run",
     "build:css": "tailwindcss -i ./src/input.css -o ./public/styles.css",
     "watch:css": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
-    "dev": "tsx watch src/app.ts",
+    "dev": "concurrently \"pnpm run watch:css\" \"tsx watch src/app.ts\"",
     "build": "tsc"
   },
   "keywords": [],
@@ -37,6 +37,7 @@
     "@types/node": "^25.9.3",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "concurrently": "^10.0.3",
     "prisma": "^7.8.0",
     "tailwindcss": "^4.3.0",
     "tsx": "^4.22.4",

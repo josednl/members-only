@@ -3,6 +3,8 @@ import express, { type Express } from 'express';
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
   res.send('Members Only Message Board');
 });

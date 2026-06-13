@@ -44,6 +44,7 @@ A private members-only message board. Users can sign up, authenticate, create me
 ## Commits
 
 - **Atomic commits**: Each commit must represent a single logical and functional change.
+- Use **Conventional Commits** format: `type(scope): description`.
 - Ensure all tests pass and type check is correct before committing.
 - Commit messages must be written in English.
 
