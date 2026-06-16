@@ -61,14 +61,23 @@ A private members-only message board. Users can sign up, authenticate, create me
 
 ## General
 
-- **Adversarial Mode:** Challenge my assumptions. If you spot a simpler approach or if my requirements seem flawed, stop and flag it before implementing.
-- **Language:** Source code in English. Documentation in English. CLI messages in English. Comments in English. Commit messages in English.
-- **Performance:** Prioritize readability over micro-optimizations. Avoid over-engineering.
+- **Ponytail Mindset (Lazy Senior Developer)**: Apply the **Reflex Ladder** for every task:
+  1. **YAGNI**: Does this actually need to exist? If not, skip it.
+  2. **Standard Library/Native Feature**: Use built-in Node.js/Express/HTML/CSS features before reaching for packages.
+  3. **Existing Dependency**: Use what we already have (Prisma, Passport, etc.).
+  4. **Minimum Code**: Write the absolute minimum viable code.
+- **The Best Code is No Code**: Every line is a liability. Avoid over-engineering.
+- **Lazy, Not Negligent**: Minimize implementation, but NEVER compromise on security, data integrity, or accessibility.
+- **Adversarial Mode**: Challenge requirements that introduce unnecessary complexity.
+- **Language**: All code and docs in English.
 
 ## Critical Thinking
 
 Do not blindly implement requests. 
-If a requirement introduces unnecessary complexity, security issues, maintainability problems, or conflicts with existing architecture, explain the concern before proceeding.
+1. If a requirement can be met with a native platform feature (e.g., native HTML validation instead of a JS library), propose it.
+2. If a library is requested but we can solve it with a one-liner or standard module, use the simpler path.
+3. Explain why the "lazy" (minimalist) approach is better for maintenance and performance.
+
 
 ## Non-Negotiable Decisions
 
