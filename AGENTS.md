@@ -88,16 +88,17 @@ If a requirement introduces unnecessary complexity, security issues, maintainabi
 
 ## Roadmap
 
-- [ ] Project setup (Express + TypeScript + Prisma)
+- [x] Project setup (Express + TypeScript + Prisma + EJS)
 - [ ] Database schema definition
 - [ ] User authentication (Sign up + Login with Passport.js)
 - [ ] Membership logic (Secret passcode)
 - [ ] Message creation and display
 - [ ] Admin privileges (Delete messages)
+- [ ] Deployment
 
 ## Evolution Notes
 
-### [YYYY-MM-DD] - Title
-- **Decision:** 
-- **Reason:** 
-- **Implication:** 
+### 2026-06-16 - Initial Setup & View Engine
+- **Decision**: Used EJS as the template engine.
+- **Reason**: Recommended for its simplicity and proximity to standard HTML, facilitating the integration of Tailwind CSS in a server-side rendered Express app.
+- **Implication**: Views are located in `src/views` and rendered using `res.render()`.
