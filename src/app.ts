@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import session from 'express-session';
 import passport from './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +40,16 @@ app.use('/', authRoutes);
 app.get('/', (req, res) => {
   res.render('index', { title: 'Members Only Message Board' });
 });
+
+// 404 handler
+app.use((req, res, next) => {
+  const err: any = new Error('Not Found');
+  err.statusCode = 404;
+  next(err);
+});
+
+// Error handler
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

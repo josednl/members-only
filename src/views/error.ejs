@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md text-center">
+        <h1 class="text-4xl font-bold text-red-600 mb-4"><%= title %></h1>
+        <p class="text-gray-700 text-lg mb-6"><%= message %></p>
+        
+        <% if (locals.error && Object.keys(error).length > 0) { %>
+            <div class="text-left bg-gray-200 p-4 rounded mb-6 overflow-auto max-h-40 text-xs">
+                <pre><%= error.stack %></pre>
+            </div>
+        <% } %>
+
+        <a href="/" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition font-semibold">Back to Home</a>
+    </div>
+</body>
+</html>
