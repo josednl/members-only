@@ -98,8 +98,8 @@ Do not blindly implement requests.
 ## Roadmap
 
 - [x] Project setup (Express + TypeScript + Prisma + EJS)
-- [/] Database schema definition (Models defined, migration pending)
-- [ ] User authentication (Sign up + Login with Passport.js)
+- [x] Database schema definition (Models defined, migration pending)
+- [x] User authentication (Sign up + Login with Passport.js)
 - [ ] Membership logic (Secret passcode)
 - [ ] Message creation and display
 - [ ] Admin privileges (Delete messages)
