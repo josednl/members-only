@@ -11,8 +11,10 @@ router.get('/login', authController.getLogin);
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
-  // failureFlash: true // We can add flash messages later if needed
 }));
+
+router.get('/join', authController.getJoin);
+router.post('/join', authController.postJoin);
 
 router.post('/logout', authController.postLogout);
 

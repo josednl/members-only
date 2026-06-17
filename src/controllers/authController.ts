@@ -10,7 +10,6 @@ export const postSignUp = async (req: Request, res: Response, next: NextFunction
   try {
     const { username, password, firstName, lastName } = req.body;
     
-    // Basic validation (ideally use a library like express-validator, but keeping it simple as per instructions)
     if (!username || !password || !firstName || !lastName) {
       return res.render('sign-up', { title: 'Sign Up', error: 'All fields are required.' });
     }
@@ -44,4 +43,30 @@ export const postLogout = (req: Request, res: Response, next: NextFunction) => {
     if (err) return next(err);
     res.redirect('/');
   });
+};
+
+export const getJoin = (req: Request, res: Response) => {
+  if (!req.user) return res.redirect('/login');
+  res.render('join', { title: 'Join the Club' });
+};
+
+export const postJoin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return res.redirect('/login');
+  
+  const { passcode } = req.body;
+  const SECRET_PASSCODE = 'PONYTAIL';
+
+  if (passcode === SECRET_PASSCODE) {
+    try {
+      await prisma.user.update({
+        where: { id: (req.user as any).id },
+        data: { isMember: true },
+      });
+      res.redirect('/');
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    res.render('join', { title: 'Join the Club', error: 'Incorrect passcode.' });
+  }
 };

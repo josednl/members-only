@@ -100,7 +100,7 @@ Do not blindly implement requests.
 - [x] Project setup (Express + TypeScript + Prisma + EJS)
 - [x] Database schema definition (Models defined, migration pending)
 - [x] User authentication (Sign up + Login with Passport.js)
-- [ ] Membership logic (Secret passcode)
+- [x] Membership logic (Secret passcode)
 - [ ] Message creation and display
 - [ ] Admin privileges (Delete messages)
 - [ ] Deployment
