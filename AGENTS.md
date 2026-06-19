@@ -111,3 +111,8 @@ Do not blindly implement requests.
 - **Decision**: Used EJS as the template engine.
 - **Reason**: Recommended for its simplicity and proximity to standard HTML, facilitating the integration of Tailwind CSS in a server-side rendered Express app.
 - **Implication**: Views are located in `src/views` and rendered using `res.render()`.
+
+### 2026-06-19 - Initial Setup & View Engine
+- **Decision**: Remove concurrently from project setup.
+- **Reason**: Running multiple processes through a single command added unnecessary complexity and did not provide enough benefit for the current development workflow.
+- **Implication**: Development processes are now started independently, resulting in a simpler setup and clearer process management.
