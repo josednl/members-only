@@ -101,7 +101,7 @@ Do not blindly implement requests.
 - [x] Database schema definition (Models defined, migration pending)
 - [x] User authentication (Sign up + Login with Passport.js)
 - [x] Membership logic (Secret passcode)
-- [ ] Message creation and display
+- [x] Message creation and display
 - [ ] Admin privileges (Delete messages)
 - [ ] Deployment
 

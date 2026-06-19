@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url';
 import session from 'express-session';
 import passport from './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
+import messageRoutes from './routes/messageRoutes.js';
+import prisma from './config/prisma.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,9 +38,18 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/', authRoutes);
+app.use('/messages', messageRoutes);
 
-app.get('/', (req, res) => {
-  res.render('index', { title: 'Members Only Message Board' });
+app.get('/', async (req, res, next) => {
+  try {
+    const messages = await prisma.message.findMany({
+      include: { author: true },
+      orderBy: { timestamp: 'desc' },
+    });
+    res.render('index', { title: 'Members Only Message Board', messages });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // 404 handler
