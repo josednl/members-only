@@ -90,9 +90,8 @@ export const postJoin = async (req: Request, res: Response, next: NextFunction) 
   }
 
   const { passcode } = req.body;
-  const SECRET_PASSCODE = 'PONYTAIL';
 
-  if (passcode === SECRET_PASSCODE) {
+  if (passcode === process.env.SECRET_PASSCODE) {
     try {
       await prisma.user.update({
         where: { id: (req.user as any).id },
