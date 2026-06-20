@@ -11,6 +11,7 @@
     "watch:css": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
+    "build:views": "cp -R src/views dist/views",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy"
   },
