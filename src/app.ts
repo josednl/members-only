@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import prisma from './config/prisma.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { serializeMessages } from './lib/serializeMessages.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,22 +43,6 @@ app.use((req, res, next) => {
   next();
 });
 
-function serializeMessages(
-  messages: Array<{ id: string; title: string; text: string; timestamp: Date; author: { firstName: string; lastName: string } }>,
-  user: Express.User | undefined,
-): Array<{ id: string; title: string; text: string; timestamp: string; authorName: string; canDelete: boolean }> {
-  const isMemberOrAdmin = !!(user && ((user as any).isMember || (user as any).isAdmin));
-  const isAdmin = !!(user && (user as any).isAdmin);
-  return messages.map(msg => ({
-    id: msg.id,
-    title: msg.title,
-    text: msg.text,
-    timestamp: msg.timestamp.toISOString(),
-    authorName: isMemberOrAdmin ? `${msg.author.firstName} ${msg.author.lastName}` : 'Anonymous',
-    canDelete: isAdmin,
-  }));
-}
-
 // Routes
 app.use('/', authRoutes);
 app.use('/messages', messageRoutes);
@@ -69,7 +54,7 @@ app.get('/', async (req, res, next) => {
       orderBy: { timestamp: 'desc' },
     });
 
-    const serialized = serializeMessages(messages, req.user);
+    const serialized = serializeMessages(messages, req.user as any);
     const pageData = {
       messages: serialized,
       currentUser: req.user
@@ -95,7 +80,7 @@ app.get('/api/messages', async (req, res, next) => {
       orderBy: { timestamp: 'desc' },
     });
 
-    const serialized = serializeMessages(messages, req.user);
+    const serialized = serializeMessages(messages, req.user as any);
     res.json({ messages: serialized });
   } catch (err) {
     next(err);
