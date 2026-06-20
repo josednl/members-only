@@ -1,28 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
+<head><%- include('partials/head', { title }) %></head>
 <body class="bg-gray-100 min-h-screen">
-    <nav class="bg-white shadow-md p-4 mb-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-xl font-bold text-blue-600">Members Only</a>
-            <div>
-                <% if (locals.currentUser) { %>
-                    <span class="mr-4 text-gray-600">Welcome, <%= currentUser.firstName %>!</span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-500 hover:text-red-700 font-semibold">Logout</button>
-                    </form>
-                <% } else { %>
-                    <a href="/login" class="mr-4 text-gray-600 hover:text-blue-600">Login</a>
-                    <a href="/sign-up" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Sign Up</a>
-                <% } %>
-            </div>
-        </div>
-    </nav>
+    <%- include('partials/nav') %>
 
     <main class="container mx-auto p-4">
         <h1 class="text-4xl font-bold text-center mb-8"><%= title %></h1>
@@ -36,42 +16,63 @@
             </div>
         <% } %>
 
-        <div class="max-w-2xl mx-auto space-y-4">
-            <% if (locals.messages && messages.length > 0) { %>
-                <% messages.forEach(function(message) { %>
-                    <div class="bg-white p-6 rounded shadow-md">
-                        <div class="flex justify-between items-start mb-2">
-                            <h2 class="text-xl font-bold"><%= message.title %></h2>
-                            <% if (locals.currentUser && currentUser.isAdmin) { %>
-                                <form action="/messages/<%= message.id %>/delete" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this message?')">
-                                    <button type="submit" class="text-red-500 hover:text-red-700 font-semibold text-sm">Delete</button>
-                                </form>
-                            <% } %>
-                        </div>
-                        <p class="text-gray-700 mb-4 whitespace-pre-wrap"><%= message.text %></p>
-                        <div class="text-sm text-gray-500 flex justify-between items-center">
-                            <span>
-                                <% if (locals.currentUser && (currentUser.isMember || currentUser.isAdmin)) { %>
-                                    Posted by <%= message.author.firstName %> <%= message.author.lastName %>
-                                <% } else { %>
-                                    Posted anonymously
-                                <% } %>
-                            </span>
-                            <span><%= message.timestamp.toLocaleString() %></span>
-                        </div>
-                    </div>
-                <% }); %>
-            <% } else { %>
-                <div class="bg-white p-6 rounded shadow-md text-center">
-                    <p class="text-gray-500 text-lg">No messages yet.</p>
-                    <% if (locals.currentUser) { %>
-                        <p class="mt-2">Be the first to <a href="/messages/new" class="text-blue-500 hover:text-blue-700 font-semibold">post a message</a>!</p>
-                    <% } else { %>
-                        <p class="mt-2"><a href="/sign-up" class="text-blue-500 hover:text-blue-700 font-semibold">Sign up</a> to post a message!</p>
-                    <% } %>
-                </div>
-            <% } %>
+        <div id="messages-container" class="max-w-2xl mx-auto space-y-4">
+            <%- include('partials/skeleton-card') %>
+            <%- include('partials/skeleton-card') %>
+            <%- include('partials/skeleton-card') %>
         </div>
     </main>
+
+    <%- include('partials/form-submit-loader') %>
+    <script id="page-data" type="application/json"><%- pageDataJson %></script>
+    <script>
+        (function () {
+            var pageData = JSON.parse(document.getElementById('page-data').textContent);
+            var container = document.getElementById('messages-container');
+            var messages = pageData.messages;
+
+            function buildCard(msg) {
+                var deleteBtn = msg.canDelete
+                    ? '<form action="/messages/' + msg.id + '/delete" method="POST" class="inline" onsubmit="return confirm(\'Are you sure you want to delete this message?\')">' +
+                      '<button type="submit" class="text-red-500 hover:text-red-700 font-semibold text-sm">Delete</button></form>'
+                    : '';
+
+                return '<div class="bg-white p-6 rounded shadow-md">' +
+                    '<div class="flex justify-between items-start mb-2">' +
+                        '<h2 class="text-xl font-bold">' + escapeHtml(msg.title) + '</h2>' +
+                        deleteBtn +
+                    '</div>' +
+                    '<p class="text-gray-700 mb-4 whitespace-pre-wrap">' + escapeHtml(msg.text) + '</p>' +
+                    '<div class="text-sm text-gray-500 flex justify-between items-center">' +
+                        '<span>Posted by ' + escapeHtml(msg.authorName) + '</span>' +
+                        '<span>' + new Date(msg.timestamp).toLocaleString() + '</span>' +
+                    '</div>' +
+                '</div>';
+            }
+
+            function buildEmpty() {
+                var cta = pageData.currentUser.isLoggedIn
+                    ? '<p class="mt-2">Be the first to <a href="/messages/new" class="text-blue-500 hover:text-blue-700 font-semibold">post a message</a>!</p>'
+                    : '<p class="mt-2"><a href="/sign-up" class="text-blue-500 hover:text-blue-700 font-semibold">Sign up</a> to post a message!</p>';
+
+                return '<div class="bg-white p-6 rounded shadow-md text-center">' +
+                    '<p class="text-gray-500 text-lg">No messages yet.</p>' +
+                    cta +
+                '</div>';
+            }
+
+            function escapeHtml(str) {
+                var div = document.createElement('div');
+                div.appendChild(document.createTextNode(str));
+                return div.innerHTML;
+            }
+
+            if (messages.length === 0) {
+                container.innerHTML = buildEmpty();
+            } else {
+                container.innerHTML = messages.map(buildCard).join('');
+            }
+        })();
+    </script>
 </body>
 </html>

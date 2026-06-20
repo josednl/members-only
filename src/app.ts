@@ -42,6 +42,22 @@ app.use((req, res, next) => {
   next();
 });
 
+function serializeMessages(
+  messages: Array<{ id: string; title: string; text: string; timestamp: Date; author: { firstName: string; lastName: string } }>,
+  user: Express.User | undefined,
+): Array<{ id: string; title: string; text: string; timestamp: string; authorName: string; canDelete: boolean }> {
+  const isMemberOrAdmin = !!(user && ((user as any).isMember || (user as any).isAdmin));
+  const isAdmin = !!(user && (user as any).isAdmin);
+  return messages.map(msg => ({
+    id: msg.id,
+    title: msg.title,
+    text: msg.text,
+    timestamp: msg.timestamp.toISOString(),
+    authorName: isMemberOrAdmin ? `${msg.author.firstName} ${msg.author.lastName}` : 'Anonymous',
+    canDelete: isAdmin,
+  }));
+}
+
 // Routes
 app.use('/', authRoutes);
 app.use('/messages', messageRoutes);
@@ -52,7 +68,35 @@ app.get('/', async (req, res, next) => {
       include: { author: true },
       orderBy: { timestamp: 'desc' },
     });
-    res.render('index', { title: 'Members Only Message Board', messages });
+
+    const serialized = serializeMessages(messages, req.user);
+    const pageData = {
+      messages: serialized,
+      currentUser: req.user
+        ? {
+            isLoggedIn: true,
+            firstName: (req.user as any).firstName,
+            isMember: (req.user as any).isMember,
+            isAdmin: (req.user as any).isAdmin,
+          }
+        : { isLoggedIn: false },
+    };
+
+    res.render('index', { title: 'Members Only Message Board', pageDataJson: JSON.stringify(pageData) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/messages', async (req, res, next) => {
+  try {
+    const messages = await prisma.message.findMany({
+      include: { author: true },
+      orderBy: { timestamp: 'desc' },
+    });
+
+    const serialized = serializeMessages(messages, req.user);
+    res.json({ messages: serialized });
   } catch (err) {
     next(err);
   }

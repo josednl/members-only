@@ -1,0 +1,10 @@
+<script>
+    (function() {
+        document.addEventListener('submit', function(e) {
+            var btn = e.target.querySelector('button[type="submit"]');
+            if (!btn || btn.disabled) return;
+            btn.disabled = true;
+            btn.textContent = 'Submitting\u2026';
+        });
+    })();
+</script>
