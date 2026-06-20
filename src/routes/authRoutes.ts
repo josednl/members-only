@@ -41,6 +41,9 @@ router.post('/login',
 router.get('/join', authController.getJoin);
 router.post('/join', authController.joinValidation, authController.postJoin);
 
+router.get('/join-admin', authController.getJoinAdmin);
+router.post('/join-admin', authController.joinAdminValidation, authController.postJoinAdmin);
+
 router.post('/logout', authController.postLogout);
 
 export default router;

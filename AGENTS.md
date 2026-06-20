@@ -102,7 +102,7 @@ Do not blindly implement requests.
 - [x] User authentication (Sign up + Login with Passport.js)
 - [x] Membership logic (Secret passcode)
 - [x] Message creation and display
-- [ ] Admin privileges (Delete messages)
+- [x] Admin privileges (Delete messages)
 - [ ] Deployment
 
 ## Evolution Notes

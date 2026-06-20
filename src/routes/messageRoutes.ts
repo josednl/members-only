@@ -5,5 +5,6 @@ const router: Router = Router();
 
 router.get('/new', messageController.getNewMessage);
 router.post('/', messageController.messageValidation, messageController.postNewMessage);
+router.post('/:id/delete', messageController.deleteMessage);
 
 export default router;

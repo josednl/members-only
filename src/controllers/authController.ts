@@ -3,6 +3,40 @@ import bcrypt from 'bcrypt';
 import { body, validationResult } from 'express-validator';
 import prisma from '../config/prisma.js';
 
+export const getJoinAdmin = (req: Request, res: Response) => {
+  if (!req.user) return res.redirect('/login');
+  res.render('admin-join', { title: 'Admin Access' });
+};
+
+export const joinAdminValidation = [
+  body('passcode').trim().notEmpty().withMessage('Passcode is required.'),
+];
+
+export const postJoinAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return res.redirect('/login');
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render('admin-join', { title: 'Admin Access', errors: errors.array() });
+  }
+
+  const { passcode } = req.body;
+
+  if (passcode === process.env.SECRET_ADMIN_PASSCODE) {
+    try {
+      await prisma.user.update({
+        where: { id: (req.user as any).id },
+        data: { isAdmin: true },
+      });
+      res.redirect('/');
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    res.render('admin-join', { title: 'Admin Access', error: 'Incorrect passcode.' });
+  }
+};
+
 export const getSignUp = (req: Request, res: Response) => {
   res.render('sign-up', { title: 'Sign Up' });
 };

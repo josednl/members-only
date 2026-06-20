@@ -12,6 +12,21 @@ export const messageValidation = [
   body('text').trim().isLength({ min: 1 }).withMessage('Message text is required.'),
 ];
 
+export const deleteMessage = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || !(req.user as any).isAdmin) {
+    return res.status(403).redirect('/');
+  }
+
+  try {
+    await prisma.message.delete({
+      where: { id: req.params.id as string },
+    });
+    res.redirect('/');
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const postNewMessage = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return res.redirect('/login');
 
