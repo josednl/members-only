@@ -38,11 +38,10 @@ pnpm install
 cp .env.example .env
 # Edit .env with your database credentials and passcodes
 
-# Run database migration
-npx prisma migrate deploy
+pnpm db:migrate
 
 # Generate Prisma client
-npx prisma generate
+pnpm db:generate
 
 # Build CSS
 pnpm build:css
@@ -50,14 +49,15 @@ pnpm build:css
 
 ### Development
 
-Run the server and CSS watcher in separate terminals:
+```bash
+pnpm dev          # dev server with hot reload
+pnpm watch:css    # rebuild CSS on changes
+```
+
+### Production
 
 ```bash
-# Terminal 1 — start the dev server (auto-restarts on changes)
-pnpm dev
-
-# Terminal 2 — rebuild CSS on changes
-pnpm watch:css
+pnpm start        # tsx src/app.ts
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -76,11 +76,14 @@ Open [http://localhost:3000](http://localhost:3000).
 | Command | Description |
 |---|---|
 | `pnpm dev` | Start dev server with hot reload (tsx watch) |
+| `pnpm start` | Start production server |
 | `pnpm build` | Compile TypeScript to JavaScript |
 | `pnpm typecheck` | Run TypeScript type checking |
 | `pnpm test:unit` | Run unit tests (Vitest) |
 | `pnpm build:css` | Build Tailwind CSS for production |
 | `pnpm watch:css` | Build Tailwind CSS in watch mode |
+| `pnpm db:generate` | Generate Prisma client |
+| `pnpm db:migrate` | Apply pending migrations |
 
 ## Features
 

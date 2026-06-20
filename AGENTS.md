@@ -103,7 +103,7 @@ Do not blindly implement requests.
 - [x] Membership logic (Secret passcode)
 - [x] Message creation and display
 - [x] Admin privileges (Delete messages)
-- [ ] Deployment
+- [x] Deployment
 
 ## Evolution Notes
 
